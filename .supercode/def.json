@@ -1,0 +1,18 @@
+{
+  "tags": [
+    "react",
+    "typescript",
+    "vite",
+    "ssr",
+    "vite-plugin-ssr",
+    "react-helmet-async",
+    "zustand",
+    "supabase",
+    "threejs",
+    "react-three-fiber",
+    "react-three-drei",
+    "tailwindcss",
+    "postcss",
+    "eslint"
+  ]
+} 

@@ -1,0 +1,89 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# CRITICAL DEPENDENCY PROTECTION RULE
+
+## 🚨 ABSOLUTE PROHIBITION: Never Delete Dependencies During Refactoring
+
+### Core Principle: PROTECTED DEPENDENCIES
+When performing ANY refactoring, code changes, or project modifications, the following dependencies MUST NEVER be removed, uninstalled, or modified:
+
+#### PROTECTED CORE STACK:
+- **React** - Core UI library
+- **TypeScript** - Type safety and development experience  
+- **Vite** - Build tool and development server
+- **SSR (Server-Side Rendering)** - Performance and SEO capabilities
+- **vite-plugin-ssr** - SSR implementation
+- **react-helmet-async** - SEO meta tag management
+- **Zustand** - State management library
+- **Supabase** - Backend-as-a-Service and database
+- **Three.js** - 3D graphics library
+- **@react-three/fiber** - React renderer for Three.js
+- **@react-three/drei** - Helper components for React Three Fiber
+- **TailwindCSS** - Utility-first CSS framework
+- **@tailwindcss/postcss** - PostCSS integration for TailwindCSS
+- **PostCSS** - CSS processing
+- **ESLint** - Code linting and quality
+
+### REFACTORING DEFINITION
+**Refactoring means:**
+- ✅ Cleaning up unnecessary files
+- ✅ Reorganizing code structure  
+- ✅ Improving code quality without changing functionality
+- ✅ Removing duplicate or obsolete files
+- ✅ Updating component structure
+- ✅ Optimizing imports and exports
+
+**Refactoring NEVER means:**
+- ❌ Removing dependencies from package.json
+- ❌ Uninstalling npm packages
+- ❌ Changing the core technology stack
+- ❌ Breaking existing functionality
+- ❌ Removing build tools or frameworks
+
+### MANDATORY PRE-REFACTOR CHECKLIST
+Before ANY refactoring operation:
+
+1. **VERIFY** all protected dependencies remain in package.json
+2. **CONFIRM** no npm uninstall commands will be run
+3. **ENSURE** core functionality will be preserved
+4. **IDENTIFY** only unnecessary files for removal (logs, duplicates, test files, etc.)
+5. **VALIDATE** that the development server will continue working
+6. **PROTECT** configuration files (vite.config.ts, tsconfig.json, tailwind.config.js, etc.)
+
+### SAFE REFACTORING TARGETS
+Only these types of files may be safely removed during refactoring:
+- Duplicate files
+- Unused component files that don't break imports
+- Log files (*.log)
+- Temporary files
+- Backup files
+- Old documentation that's been replaced
+- Test files that are no longer needed
+
+### EMERGENCY PROTOCOL
+If dependencies are accidentally removed:
+1. **STOP** all operations immediately
+2. **RESTORE** package.json from backup or reconstruct
+3. **REINSTALL** all protected dependencies
+4. **VERIFY** development server runs correctly
+5. **TEST** all functionality before proceeding
+
+### VIOLATION CONSEQUENCES
+Any violation of this rule that removes protected dependencies is considered a **CRITICAL ERROR** that:
+- Breaks the development environment
+- Wastes significant time restoring functionality
+- Damages user trust and project stability
+- Requires immediate remediation
+
+### SUCCESS METRICS
+A successful refactor maintains:
+- All protected dependencies intact
+- Development server functionality
+- All existing features working
+- Cleaner, more organized codebase
+- No breaking changes to core functionality
+
+**REMEMBER: When in doubt about whether something should be removed during refactoring, DON'T REMOVE IT. Preservation of functionality is more important than aggressive cleanup.**

@@ -1,0 +1,7 @@
+---
+description: 
+globs: vite.config.ts
+alwaysApply: false
+---
+- Implement an optimized chunking strategy during the Vite build process, such as code splitting, to generate smaller bundle sizes.
+- Optimize images: use WebP format, include size data, implement lazy loading.

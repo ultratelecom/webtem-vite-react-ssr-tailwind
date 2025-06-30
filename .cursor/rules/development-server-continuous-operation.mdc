@@ -1,0 +1,133 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Development Server Continuous Operation Rule
+
+## Core Principle: Always-On Development Environment
+The development server MUST maintain continuous operation during all coding sessions to provide immediate visual feedback and seamless developer experience. This ensures real-time preview of all code changes and maintains optimal development velocity.
+
+## Automatic Server Management Protocol
+
+### 1. Pre-Development Initialization
+- **VERIFY** development server status before any code editing begins
+- **AUTO-START** the development server if not already running
+- **ENSURE** proper port allocation and network accessibility
+- **CONFIRM** hot module replacement (HMR) and fast refresh are functioning
+- **VALIDATE** environment variables and configuration are loaded correctly
+
+### 2. Smart Server Startup Procedure
+```bash
+# For Vite-based projects (React, Vue, Vanilla)
+npm run dev
+# OR with specific configuration
+npx vite --host 0.0.0.0 --port 3000 --open
+
+# For Next.js projects
+npm run dev -- --port 3000 --turbo
+# OR with network access
+npm run dev -- --hostname 0.0.0.0 --port 3000
+
+# For Node.js/Express servers
+npx nodemon server.js --port 3000
+# OR with specific environment
+NODE_ENV=development npm start
+```
+
+### 3. Continuous Health Monitoring
+- **MONITOR** server health and performance throughout development session
+- **AUTO-RESTART** on crashes, errors, or configuration changes
+- **MAINTAIN** consistent port usage with intelligent fallback (3000 → 3001 → 5173 → 8080)
+- **PRESERVE** development state and user session when possible
+- **TRACK** build times and optimization opportunities
+
+### 4. Live Update Validation & Performance
+- **VERIFY** hot reloading responds to file changes within 2 seconds
+- **TEST** CSS changes apply instantly without full page reload
+- **ENSURE** React component changes reflect immediately with state preservation
+- **CONFIRM** TypeScript compilation errors display in real-time
+- **VALIDATE** source maps work correctly for debugging
+
+### 5. Intelligent Error Recovery Protocol
+When server issues occur, follow this escalation:
+1. **SOFT RESTART**: `Ctrl+C` and restart with same command
+2. **CACHE CLEAR**: `rm -rf node_modules/.cache .next/cache dist/ .vite/`
+3. **DEPENDENCY REFRESH**: `rm package-lock.json && npm install`
+4. **PORT CONFLICT RESOLUTION**: `lsof -ti:3000,3001,5173 | xargs kill -9`
+5. **ENVIRONMENT RESET**: Verify `.env` files and restart system
+
+### 6. Multi-Project Orchestration
+- **ASSIGN** unique ports for concurrent projects (e.g., 3000, 3001, 3002)
+- **DOCUMENT** active server URLs in development session
+- **PREVENT** port conflicts between different frameworks
+- **COORDINATE** database and API server dependencies
+
+### 7. Performance & Developer Experience Optimization
+- **ENABLE** fastest possible hot reloading and compilation
+- **CONFIGURE** efficient file watching with ignore patterns
+- **OPTIMIZE** build pipeline for sub-second feedback loops
+- **MINIMIZE** full page reloads in favor of hot updates
+- **IMPLEMENT** progressive web app features for offline development
+
+### 8. Network & Accessibility Standards
+- **PROVIDE** localhost AND network IP access for mobile testing
+- **ENABLE** HTTPS in development when needed for modern APIs
+- **CONFIGURE** proper CORS settings for API integration
+- **ENSURE** responsive design testing across device viewports
+- **MAINTAIN** consistent URLs throughout development session
+
+## Framework-Specific Implementation
+
+### React + Vite Projects:
+```bash
+# Optimal startup with network access and debugging
+npm run dev -- --host 0.0.0.0 --port 3000 --open --force
+```
+
+### Next.js Projects:
+```bash
+# Maximum performance with turbo and network access
+npm run dev -- --turbo --hostname 0.0.0.0 --port 3000
+```
+
+### Node.js + Express APIs:
+```bash
+# Auto-restart with environment variables
+NODE_ENV=development npx nodemon --exec "node --inspect" server.js
+```
+
+### Full-Stack Projects:
+```bash
+# Concurrent frontend and backend (using concurrently)
+npm run dev:full  # Should start both client and server
+```
+
+## Real-Time Quality Assurance Checklist
+- [ ] Server starts successfully within 10 seconds
+- [ ] Application loads in browser without console errors
+- [ ] Hot reloading responds to changes within 2 seconds
+- [ ] TypeScript errors display immediately in terminal and browser
+- [ ] CSS changes apply without page refresh
+- [ ] Component state preserves during hot updates
+- [ ] Network URL accessible for mobile device testing
+- [ ] Development tools and React DevTools function properly
+- [ ] Source maps enable accurate debugging
+- [ ] Build process completes without warnings
+
+## Emergency Recovery Procedures
+If development server becomes completely unresponsive:
+1. **FORCE KILL**: `pkill -f "node\|vite\|next"` 
+2. **CLEAN SLATE**: `rm -rf node_modules package-lock.json && npm install`
+3. **PORT LIBERATION**: `sudo lsof -ti:3000,3001,5173,8080 | xargs sudo kill -9`
+4. **SYSTEM RESTART**: Restart terminal/IDE and begin fresh session
+5. **VERBOSE DEBUG**: Start server with maximum logging for issue diagnosis
+
+## Success Metrics
+- **Startup Time**: < 10 seconds from command to accessible URL
+- **Hot Reload Speed**: < 2 seconds from file save to browser update  
+- **Uptime**: > 99% during active development sessions
+- **Error Recovery**: < 30 seconds to restore functionality
+- **Developer Satisfaction**: Seamless coding experience with immediate feedback
+
+This rule ensures maximum development velocity through continuous visual feedback and eliminates context switching between coding and testing phases.

@@ -1,0 +1,237 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# SEO & SSR DEPLOYMENT PREPARATION RULE
+
+## 🚀 TRIGGER CONDITIONS: When to Implement SSR for SEO
+
+### Automatic SSR Implementation Required When:
+- **SEO** is mentioned or discussed
+- **Website launch** preparation begins
+- **Production deployment** is planned
+- **Going live** or making website public
+- **Search engine visibility** is needed
+- **Meta tags** and social sharing optimization required
+- **Performance audits** for production readiness
+
+## 📋 PRE-SSR IMPLEMENTATION CHECKLIST
+
+### 1. Project Readiness Assessment
+- [ ] Core functionality working without SSR
+- [ ] All components and pages finalized
+- [ ] Navigation structure complete
+- [ ] Content strategy defined
+- [ ] All protected dependencies verified intact
+
+### 2. SEO Strategy Planning
+- [ ] Target keywords identified
+- [ ] Page titles and descriptions planned
+- [ ] Open Graph and Twitter Card metadata designed
+- [ ] Structured data requirements assessed
+- [ ] Sitemap structure planned
+
+## 🛠️ SSR IMPLEMENTATION STRUCTURE
+
+### Phase 1: Environment Preparation
+```bash
+# Verify all SSR dependencies are installed
+npm list vite-plugin-ssr react-helmet-async --depth=0
+
+# Install if missing (with dependency protection)
+npm install vite-plugin-ssr react-helmet-async --legacy-peer-deps
+```
+
+### Phase 2: Vite Configuration Setup
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import ssr from 'vite-plugin-ssr/plugin'
+
+export default defineConfig({
+  plugins: [react(), ssr()],
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
+})
+```
+
+### Phase 3: Page Structure Creation
+Required files for proper SSR:
+```
+pages/
+├── _default.page.server.tsx   # Server-side rendering
+├── _default.page.client.tsx   # Client-side hydration  
+├── index.page.tsx            # Homepage content
+└── _error.page.tsx           # Error page (recommended)
+```
+
+### Phase 4: Server-Side Rendering Setup
+```typescript
+// pages/_default.page.server.tsx
+export { render }
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { HelmetProvider } from 'react-helmet-async'
+
+function render(pageContext: any) {
+  const { Page, pageProps } = pageContext
+  const helmetContext: any = {}
+  
+  const pageHtml = renderToString(
+    <HelmetProvider context={helmetContext}>
+      <Page {...pageProps} />
+    </HelmetProvider>
+  )
+  
+  const { helmet } = helmetContext
+  
+  return {
+    documentHtml: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    ${helmet ? helmet.title.toString() : ''}
+    ${helmet ? helmet.meta.toString() : ''}
+    ${helmet ? helmet.link.toString() : ''}
+  </head>
+  <body>
+    <div id="root">${pageHtml}</div>
+  </body>
+</html>`
+  }
+}
+```
+
+### Phase 5: Client-Side Hydration
+```typescript
+// pages/_default.page.client.tsx
+export { render }
+import React from 'react'
+import { hydrateRoot } from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async'
+
+function render(pageContext: any) {
+  const { Page, pageProps } = pageContext
+  
+  hydrateRoot(
+    document.getElementById('root')!,
+    <HelmetProvider>
+      <Page {...pageProps} />
+    </HelmetProvider>
+  )
+}
+```
+
+### Phase 6: SEO-Optimized Page Component
+```typescript
+// pages/index.page.tsx
+import React from 'react'
+import { Helmet } from 'react-helmet-async'
+
+export default function HomePage() {
+  return (
+    <>
+      <Helmet>
+        <title>Your Site Title - Keywords</title>
+        <meta name="description" content="Compelling description under 160 characters" />
+        <meta property="og:title" content="Social Media Title" />
+        <meta property="og:description" content="Social media description" />
+        <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:url" content="https://yoursite.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href="https://yoursite.com" />
+      </Helmet>
+      
+      {/* Your page content here */}
+    </>
+  )
+}
+```
+
+## ⚠️ COMMON SSR ERROR SOLUTIONS
+
+### Error: "You must create at least one *.page.js file"
+**Solution:** Create `pages/index.page.tsx` with content
+
+### Error: "Named export 'Helmet' not found"
+**Solution:** Use correct import: `import { Helmet } from 'react-helmet-async'`
+
+### Error: "Cannot find module 'vite-plugin-ssr/plugin'"
+**Solution:** Install dependency: `npm install vite-plugin-ssr --legacy-peer-deps`
+
+### Error: React Hydration Mismatch
+**Solution:** Ensure server and client render identical content
+
+### Error: PostCSS TailwindCSS Plugin Issues
+**Solution:** Use `@tailwindcss/postcss` plugin in postcss.config.js
+
+## 🎯 SEO OPTIMIZATION CHECKLIST
+
+### Technical SEO
+- [ ] Server-side rendering implemented
+- [ ] Meta tags optimized for each page
+- [ ] Open Graph tags for social sharing
+- [ ] Twitter Cards configured
+- [ ] Structured data implemented
+- [ ] Sitemap generated
+- [ ] Robots.txt configured
+
+### Performance SEO
+- [ ] Core Web Vitals optimized
+- [ ] Images optimized (WebP, lazy loading)
+- [ ] Code splitting implemented
+- [ ] Bundle size optimized
+- [ ] Caching strategy implemented
+
+### Content SEO
+- [ ] Page titles optimized (50-60 characters)
+- [ ] Meta descriptions optimized (150-160 characters)
+- [ ] Heading hierarchy (H1, H2, H3) structured
+- [ ] Alt text for all images
+- [ ] Internal linking strategy
+
+## 🚀 DEPLOYMENT READINESS VALIDATION
+
+### Pre-Launch Tests
+```bash
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# SEO audit tools
+# - Google PageSpeed Insights
+# - GTmetrix
+# - SEMrush Site Audit
+# - Screaming Frog (for crawling)
+```
+
+### Success Metrics
+- [ ] All pages render on server-side
+- [ ] Meta tags appear in page source
+- [ ] Social sharing previews work
+- [ ] Google Search Console validates
+- [ ] Core Web Vitals pass
+- [ ] No SSR hydration errors
+
+## 💡 DEVELOPMENT WORKFLOW
+
+### During Development (SSR Disabled)
+- Focus on functionality and user experience
+- Use standard Vite + React setup
+- Iterate quickly with hot reload
+
+### Pre-Launch (SSR Enabled)
+- Implement SSR for SEO optimization
+- Add comprehensive meta tags
+- Test social sharing
+- Validate search engine compatibility
+- Performance optimization
+
+**Remember: SSR is for SEO and production readiness, not for development convenience!**
